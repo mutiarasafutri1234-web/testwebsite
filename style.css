@@ -1,0 +1,317 @@
+/* ============================================================
+   style.css — Task List
+   Custom styles that complement Tailwind CSS utility classes.
+   Only add styles here that cannot be expressed cleanly with
+   Tailwind alone (e.g. animations, pseudo-elements, scrollbar).
+   ============================================================ */
+
+/* ---------- Google Font import (fallback if HTML link fails) ---------- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* ============================================================
+   COLOUR PALETTE — 6 warna: merah, kuning, hijau, biru, ungu, pink
+   Dipakai sebagai: border-left aksen, checkbox, badge, header gradient
+   ============================================================ */
+
+:root {
+  --red:    #ef4444;
+  --yellow: #eab308;
+  --green:  #22c55e;
+  --blue:   #3b82f6;
+  --purple: #a855f7;
+  --pink:   #ec4899;
+
+  --red-light:    #fef2f2;
+  --yellow-light: #fefce8;
+  --green-light:  #f0fdf4;
+  --blue-light:   #eff6ff;
+  --purple-light: #faf5ff;
+  --pink-light:   #fdf2f8;
+}
+
+/* ============================================================
+   HEADER — rainbow gradient title & icon
+   ============================================================ */
+.header-title {
+  background: linear-gradient(
+    90deg,
+    var(--red) 0%,
+    var(--yellow) 20%,
+    var(--green) 40%,
+    var(--blue) 60%,
+    var(--purple) 80%,
+    var(--pink) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.header-icon {
+  /* cycle icon colour through palette */
+  stroke: url(#rainbow-gradient);
+  color: var(--blue); /* fallback */
+}
+
+/* ============================================================
+   FORM HEADER background — subtle rainbow top border
+   ============================================================ */
+.form-header-bg {
+  background: #f8faff;
+  border-top: 3px solid transparent;
+  border-image: linear-gradient(
+    90deg,
+    var(--red),
+    var(--yellow),
+    var(--green),
+    var(--blue),
+    var(--purple),
+    var(--pink)
+  ) 1;
+}
+
+/* Add button — rainbow gradient */
+.add-btn {
+  background: linear-gradient(135deg, var(--blue) 0%, var(--purple) 100%);
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.25);
+}
+.add-btn:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #9333ea 100%);
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+}
+
+/* Input focus ring colour */
+.task-input-field:focus {
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2);
+}
+
+/* Save edit button — matches add-btn */
+.save-edit-btn {
+  background: linear-gradient(135deg, var(--blue) 0%, var(--purple) 100%);
+}
+.save-edit-btn:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #9333ea 100%);
+}
+
+/* ============================================================
+   FILTER TABS
+   ============================================================ */
+.filter-btn {
+  color: #64748b;
+  background: transparent;
+}
+.filter-btn:hover {
+  background: #f1f5f9;
+  color: #334155;
+}
+.filter-btn.active-filter {
+  background: linear-gradient(135deg, var(--blue) 0%, var(--purple) 100%);
+  color: #ffffff;
+}
+
+/* ============================================================
+   TASK ITEM — base
+   ============================================================ */
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1.25rem;
+  transition: background-color 0.15s ease;
+  border-left: 4px solid transparent; /* colour assigned per class below */
+}
+.task-item:hover {
+  background-color: #f8fafc;
+}
+
+/* Task label */
+.task-label {
+  flex: 1;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #1e293b;
+  cursor: pointer;
+  word-break: break-word;
+  transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+.task-label.completed {
+  text-decoration: line-through;
+  color: #94a3b8;
+}
+
+/* ============================================================
+   COLOUR CLASSES — applied per task via JS (.color-red, etc.)
+   Each class sets: border-left, checkbox colour, hover bg
+   ============================================================ */
+
+/* ── Red ──────────────────────────────────────── */
+.color-red  { border-left-color: var(--red); }
+.color-red .task-checkbox:hover  { border-color: var(--red); }
+.color-red .task-checkbox:checked { background-color: var(--red); border-color: var(--red); }
+.color-red .task-checkbox:focus  { box-shadow: 0 0 0 3px rgba(239,68,68,.2); }
+.color-red:hover { background-color: var(--red-light) !important; }
+
+/* ── Yellow ───────────────────────────────────── */
+.color-yellow { border-left-color: var(--yellow); }
+.color-yellow .task-checkbox:hover  { border-color: var(--yellow); }
+.color-yellow .task-checkbox:checked { background-color: var(--yellow); border-color: var(--yellow); }
+.color-yellow .task-checkbox:focus  { box-shadow: 0 0 0 3px rgba(234,179,8,.2); }
+.color-yellow:hover { background-color: var(--yellow-light) !important; }
+
+/* ── Green ────────────────────────────────────── */
+.color-green { border-left-color: var(--green); }
+.color-green .task-checkbox:hover  { border-color: var(--green); }
+.color-green .task-checkbox:checked { background-color: var(--green); border-color: var(--green); }
+.color-green .task-checkbox:focus  { box-shadow: 0 0 0 3px rgba(34,197,94,.2); }
+.color-green:hover { background-color: var(--green-light) !important; }
+
+/* ── Blue ─────────────────────────────────────── */
+.color-blue { border-left-color: var(--blue); }
+.color-blue .task-checkbox:hover  { border-color: var(--blue); }
+.color-blue .task-checkbox:checked { background-color: var(--blue); border-color: var(--blue); }
+.color-blue .task-checkbox:focus  { box-shadow: 0 0 0 3px rgba(59,130,246,.2); }
+.color-blue:hover { background-color: var(--blue-light) !important; }
+
+/* ── Purple ───────────────────────────────────── */
+.color-purple { border-left-color: var(--purple); }
+.color-purple .task-checkbox:hover  { border-color: var(--purple); }
+.color-purple .task-checkbox:checked { background-color: var(--purple); border-color: var(--purple); }
+.color-purple .task-checkbox:focus  { box-shadow: 0 0 0 3px rgba(168,85,247,.2); }
+.color-purple:hover { background-color: var(--purple-light) !important; }
+
+/* ── Pink ─────────────────────────────────────── */
+.color-pink { border-left-color: var(--pink); }
+.color-pink .task-checkbox:hover  { border-color: var(--pink); }
+.color-pink .task-checkbox:checked { background-color: var(--pink); border-color: var(--pink); }
+.color-pink .task-checkbox:focus  { box-shadow: 0 0 0 3px rgba(236,72,153,.2); }
+.color-pink:hover { background-color: var(--pink-light) !important; }
+
+/* ============================================================
+   COLOUR DOT BADGE — small circle next to task text
+   ============================================================ */
+.color-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: inline-block;
+}
+.color-dot.dot-red    { background: var(--red); }
+.color-dot.dot-yellow { background: var(--yellow); }
+.color-dot.dot-green  { background: var(--green); }
+.color-dot.dot-blue   { background: var(--blue); }
+.color-dot.dot-purple { background: var(--purple); }
+.color-dot.dot-pink   { background: var(--pink); }
+
+/* ============================================================
+   CUSTOM CHECKBOX — base
+   ============================================================ */
+.task-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid #cbd5e1;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  flex-shrink: 0;
+  position: relative;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+/* Checkmark via pseudo-element */
+.task-checkbox:checked::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 5px;
+  width: 6px;
+  height: 10px;
+  border: 2px solid #fff;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg);
+}
+
+/* ============================================================
+   ACTION BUTTONS (edit / delete)
+   ============================================================ */
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.5rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+  color: #94a3b8;
+}
+.action-btn:hover {
+  transform: scale(1.1);
+}
+.action-btn.edit-btn:hover {
+  background-color: #ede9fe; /* purple-100 */
+  color: #7c3aed;            /* purple-700 */
+}
+.action-btn.delete-btn:hover {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+/* ============================================================
+   PROGRESS text — rainbow gradient
+   ============================================================ */
+#task-progress {
+  background: linear-gradient(90deg, var(--blue), var(--purple), var(--pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ============================================================
+   MODAL ANIMATION
+   ============================================================ */
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(-12px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.animate-modal {
+  animation: modalIn 0.2s ease forwards;
+}
+
+/* ============================================================
+   TASK ITEM ENTER ANIMATION
+   ============================================================ */
+@keyframes taskIn {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.task-enter {
+  animation: taskIn 0.2s ease forwards;
+}
+
+/* ============================================================
+   CUSTOM SCROLLBAR (WebKit)
+   ============================================================ */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f1f5f9; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* ============================================================
+   EMPTY STATE visibility helper
+   ============================================================ */
+#empty-state:not(.hidden) {
+  display: flex;
+}
+
+/* ============================================================
+   RESPONSIVE TWEAKS
+   ============================================================ */
+@media (max-width: 480px) {
+  .add-btn span { display: none; }
+}

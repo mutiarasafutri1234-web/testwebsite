@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task List</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Tailwind custom config -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              /* 6-colour palette */
+              "c-red":    { DEFAULT: "#ef4444", light: "#fef2f2", border: "#fca5a5" },
+              "c-yellow": { DEFAULT: "#eab308", light: "#fefce8", border: "#fde047" },
+              "c-green":  { DEFAULT: "#22c55e", light: "#f0fdf4", border: "#86efac" },
+              "c-blue":   { DEFAULT: "#3b82f6", light: "#eff6ff", border: "#93c5fd" },
+              "c-purple": { DEFAULT: "#a855f7", light: "#faf5ff", border: "#d8b4fe" },
+              "c-pink":   { DEFAULT: "#ec4899", light: "#fdf2f8", border: "#f9a8d4" },
+            },
+            fontFamily: {
+              sans: ['"Inter"', "ui-sans-serif", "system-ui", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- Google Font: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body class="bg-slate-100 min-h-screen font-sans text-slate-800 antialiased">
+
+    <!-- ===== PAGE WRAPPER ===== -->
+    <div class="max-w-2xl mx-auto px-4 py-10">
+
+      <!-- ===== HEADER ===== -->
+      <header class="mb-8 text-center">
+        <div class="flex items-center justify-center gap-2 mb-1">
+          <!-- Checklist icon (inline SVG) — rainbow gradient effect via CSS -->
+          <svg class="w-8 h-8 header-icon" fill="none" stroke="currentColor" stroke-width="2"
+            viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2
+                 M9 5a2 2 0 002 2h2a2 2 0 002-2
+                 M9 5a2 2 0 012-2h2a2 2 0 012 2
+                 m-6 9l2 2 4-4" />
+          </svg>
+          <h1 class="text-3xl font-bold tracking-tight header-title">Task List</h1>
+        </div>
+        <p class="text-sm text-slate-500">Stay organised. Stay productive.</p>
+      </header>
+
+      <!-- ===== MAIN CARD ===== -->
+      <main>
+        <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+
+          <!-- ===== ADD TASK FORM ===== -->
+          <section
+            class="p-5 border-b border-slate-100 form-header-bg"
+            aria-label="Add new task"
+          >
+            <form id="task-form" class="flex gap-3" novalidate>
+              <input
+                id="task-input"
+                type="text"
+                placeholder="Add a new task…"
+                maxlength="120"
+                autocomplete="off"
+                aria-label="Task description"
+                class="flex-1 rounded-xl border border-slate-200 bg-white px-4 py-2.5
+                       text-sm text-slate-800 placeholder-slate-400
+                       focus:outline-none focus:ring-2 focus:border-transparent
+                       transition task-input-field"
+              />
+              <button
+                type="submit"
+                aria-label="Add task"
+                class="add-btn flex items-center gap-1.5 rounded-xl px-5 py-2.5
+                       text-sm font-semibold text-white
+                       active:scale-95
+                       focus:outline-none
+                       transition-all duration-150"
+              >
+                <!-- Plus icon -->
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5"
+                  viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                </svg>
+                <span>Add</span>
+              </button>
+            </form>
+
+            <!-- Inline validation message -->
+            <p
+              id="form-error"
+              class="mt-2 text-xs text-red-500 hidden"
+              role="alert"
+              aria-live="polite"
+            >
+              Please enter a task description.
+            </p>
+          </section>
+
+          <!-- ===== FILTER TABS ===== -->
+          <section
+            class="flex items-center justify-between px-5 py-3 border-b border-slate-100"
+            aria-label="Filter tasks"
+          >
+            <nav class="flex gap-1" role="tablist" aria-label="Task filters">
+              <!-- Filter buttons rendered by JS so we keep a static placeholder -->
+              <button
+                data-filter="all"
+                role="tab"
+                aria-selected="true"
+                class="filter-btn active-filter px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-150"
+              >All</button>
+              <button
+                data-filter="active"
+                role="tab"
+                aria-selected="false"
+                class="filter-btn px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-150"
+              >Active</button>
+              <button
+                data-filter="completed"
+                role="tab"
+                aria-selected="false"
+                class="filter-btn px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-150"
+              >Completed</button>
+            </nav>
+
+            <!-- Clear completed button -->
+            <button
+              id="clear-completed-btn"
+              class="text-xs text-slate-400 hover:text-red-400 transition hidden"
+              aria-label="Clear all completed tasks"
+            >
+              Clear completed
+            </button>
+          </section>
+
+          <!-- ===== TASK LIST ===== -->
+          <section aria-label="Task list">
+            <ul
+              id="task-list"
+              class="divide-y divide-slate-50"
+              role="list"
+              aria-live="polite"
+              aria-label="Tasks"
+            >
+              <!-- Task items injected by JavaScript -->
+            </ul>
+
+            <!-- Empty state -->
+            <div
+              id="empty-state"
+              class="hidden flex-col items-center justify-center py-14 text-slate-400"
+              aria-live="polite"
+            >
+              <svg class="w-12 h-12 mb-3 text-slate-200" fill="none" stroke="currentColor"
+                stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7
+                     a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2
+                     M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              </svg>
+              <p class="text-sm font-medium">No tasks here</p>
+              <p class="text-xs mt-1">Add one above to get started!</p>
+            </div>
+          </section>
+
+          <!-- ===== FOOTER / STATS ===== -->
+          <footer
+            class="px-5 py-3 flex items-center justify-between bg-slate-50
+                   border-t border-slate-100 text-xs text-slate-400"
+          >
+            <span id="task-count">0 tasks left</span>
+            <span id="task-progress" class="font-medium"></span>
+          </footer>
+
+        </div><!-- /main card -->
+      </main>
+
+    </div><!-- /page wrapper -->
+
+    <!-- ===== EDIT MODAL ===== -->
+    <div
+      id="edit-modal"
+      class="fixed inset-0 z-50 hidden items-center justify-center p-4
+             bg-slate-900/50 backdrop-blur-sm"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+    >
+      <div class="bg-white w-full max-w-md rounded-2xl shadow-xl p-6 animate-modal">
+        <h2 id="modal-title" class="text-base font-semibold text-slate-800 mb-4">Edit Task</h2>
+        <input
+          id="edit-input"
+          type="text"
+          maxlength="120"
+          autocomplete="off"
+          aria-label="Edit task description"
+          class="w-full rounded-xl border border-slate-200 px-4 py-2.5
+                 text-sm text-slate-800 placeholder-slate-400
+                 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent
+                 transition mb-5"
+        />
+        <div class="flex justify-end gap-3">
+          <button
+            id="cancel-edit-btn"
+            class="px-5 py-2 rounded-xl text-sm font-medium text-slate-500
+                   border border-slate-200 hover:bg-slate-50 transition"
+          >
+            Cancel
+          </button>
+          <button
+            id="save-edit-btn"
+            class="save-edit-btn px-5 py-2 rounded-xl text-sm font-semibold
+                   text-white focus:outline-none transition"
+          >
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+  </body>
+</html>
